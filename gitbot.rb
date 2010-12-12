@@ -10,13 +10,12 @@ puts $config["host"]
 
 $bot = Cinch::Bot.new do
   configure do |c|
-    c.nick = $config["nick"]
+    c.nick = $config["irc"]["nick"]
     c.user = "gitbot"
     c.realname = "GitBot (c) piet"
-    c.server = $config["server"]
-    c.port = $config["port"]
-    c.channels = ["#git"]
-    c.plugins.plugins = [GitBot]
+    c.server = $config["irc"]["server"]
+    c.port = $config["irc"]["port"]
+    c.channels = $config["irc"]["channels"]
   end
 end
 
@@ -24,9 +23,15 @@ Thread.new do
   $bot.start
 end
 
-
 def say(msg)
   $bot.Channel("#git").send msg
+end
+
+configure do
+  set :bind, $config["http"]["host"]
+  set :port, $config["http"]["port"]
+  set :logging, false
+  set :lock, true
 end
 
 get "/" do
@@ -34,18 +39,15 @@ get "/" do
 end
 
 post "/github" do
-  col1 = "\0033"
-  col2 = "\0037"
-  col3 = "\0030"
-  nocol = "\0030"
-
+  p params[:payload]
   push = JSON.parse(params[:payload])
 
   repo = push["repository"]["name"]
   branch = push["ref"].gsub(/^refs\/heads\//,"")
-  
+
+  # TODO: sort commits by timestamp
   push["commits"].each do |c|
-    say "#{col3}#{repo}: #{col2}#{branch} #{col1}#{c["author"]["name"]} #{nocol}#{c["message"]}"
+    say "\0030#{repo}:\0037 #{branch}\0033 #{c["author"]["name"]}\00315 #{c["message"]}"
   end
 
   push.inspect
