@@ -1,0 +1,22 @@
+# IRC connection settings
+irc:
+    server: "irc.freenode.org"
+    port: 6667
+    nick: GitBot
+
+    # Here you can specify the channels that GitBot will join
+    channels: 
+        - "#someproject"
+        - "#otherproject"
+
+# HTTP server settings
+http:
+    host: 0.0.0.0
+    port: 5651
+
+# By default GitBot will announce all commits to all channels. You can limit 
+# a certain channel to only a specified group of repositories by adding a 
+# channel filter
+filters:
+    \#someproject: [only_this_repo, and_that_repo]
+
