@@ -47,7 +47,7 @@ post "/github" do
 
   # TODO: sort commits by timestamp
   push["commits"].each do |c|
-    say "\0030#{repo}:\0037 #{branch}\0033 #{c["author"]["name"]}\00315 #{c["message"]}"
+    say "\0030#{repo}:\0037 #{branch}\0033 #{c["author"]["name"]}\003 #{c["message"]}"
   end
 
   push.inspect
