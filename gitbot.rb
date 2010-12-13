@@ -1,5 +1,15 @@
 #!/usr/bin/env ruby
 
+require "rubygems"
+require "bundler"
+begin
+  Bundler.setup
+rescue Bundler::BundlerError => e
+  STDERR.puts e.message
+  STDERR.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
+end
+
 require "cinch"
 require "sinatra"
 require "yaml"
@@ -14,9 +24,6 @@ end
 
 $config = YAML.load_file config_file
 puts $config["host"]
-
-p $config
-exit
 
 $bot = Cinch::Bot.new do
   configure do |c|
