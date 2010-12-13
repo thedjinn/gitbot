@@ -5,7 +5,14 @@ require "sinatra"
 require "yaml"
 require "json"
 
-$config = YAML.load_file "config.yml"
+config_file = ARGV.shift || "config.yml"
+if not File.exists? config_file
+  puts "can't find config file #{config_file}"
+  puts "either create it or specify another config file with #{$0} [filename]"
+  exit
+end
+
+$config = YAML.load_file config_file
 puts $config["host"]
 
 $bot = Cinch::Bot.new do

@@ -10,7 +10,7 @@ Usage
 
 * First you must make a `config.yml` file so that GitBot knows where it should connect to. You can make a copy of the `config.yml.example` file and use that as a basis.
 
-* After that just run `gitbot.rb`. This will start the bot and its built-in webhook server.
+* After that just run `gitbot.rb`. This will start the bot and its built-in webhook server. Alternatively, you can specify a different location for the config file with `gitbot.rb [config_file]`.
 
 * You can now add a webhook to a GitHub project. Use the following url: `http://server.com:5651/github`. 
 
