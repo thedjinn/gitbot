@@ -18,5 +18,5 @@ http:
 # a certain channel to only a specified group of repositories by adding a 
 # channel filter
 filters:
-    \#someproject: [only_this_repo, and_that_repo]
+    "#someproject": [only_this_repo, and_that_repo]
 

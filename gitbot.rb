@@ -15,6 +15,9 @@ end
 $config = YAML.load_file config_file
 puts $config["host"]
 
+p $config
+exit
+
 $bot = Cinch::Bot.new do
   configure do |c|
     c.nick = $config["irc"]["nick"]
