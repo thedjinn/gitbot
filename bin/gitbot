@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require "datetime"
 require "cinch"
 require "sinatra"
 require "yaml"
@@ -52,9 +53,18 @@ post "/github" do
   repo = push["repository"]["name"]
   branch = push["ref"].gsub(/^refs\/heads\//,"")
 
-  # TODO: sort commits by timestamp
-  push["commits"].each do |c|
+  # sort commits by timestamp
+  push["commits"].sort! do |a,b|
+    DateTime.parse(a["timestamp"]) <=> DateTime.parse(b["timestamp"])
+  end
+
+  # output first 3 commits
+  push["commits"][0..2].each do |c|
     say "\0030#{repo}:\0037 #{branch}\0033 #{c["author"]["name"]}\003 #{c["message"]}"
+  end
+
+  if push["commits"].length-2 > 0
+    say "\0030#{repo}:\0037 #{branch}\003 ... and #{push["commits"].length-2} more"
   end
 
   push.inspect
