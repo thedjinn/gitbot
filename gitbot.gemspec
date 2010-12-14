@@ -10,10 +10,10 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Emil Loer"]
   s.date = %q{2010-12-14}
-  s.default_executable = %q{gitbot.rb}
+  s.default_executable = %q{gitbot}
   s.description = %q{An IRC bot that listens to GitHub webhooks}
   s.email = %q{emil@koffietijd.net}
-  s.executables = ["gitbot.rb"]
+  s.executables = ["gitbot"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.markdown"
@@ -25,8 +25,9 @@ Gem::Specification.new do |s|
     "README.markdown",
     "Rakefile",
     "VERSION",
-    "bin/gitbot.rb",
-    "config.yml.example"
+    "bin/gitbot",
+    "config.yml.example",
+    "gitbot.gemspec"
   ]
   s.homepage = %q{http://github.com/thedjinn/gitbot}
   s.licenses = ["MIT"]
