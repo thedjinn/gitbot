@@ -1,0 +1,81 @@
+#!/bin/bash
+
+HOST=example.com
+PORT=5651
+URL=http://host.com/path/to/repo
+NAME=repository_name
+
+GIT_DIR=$(git rev-parse --git-dir 2>/dev/null)
+if [ -z "$GIT_DIR" ]; then
+  echo >&2 "fatal: post-receive: GIT_DIR not set"
+  exit 1
+fi
+
+if [ -n "$1" -a -n "$2" -a -n "$3" ]; then
+  oldrev=$1
+  newrev=$2
+  refname=$3
+else
+  read oldrev newrev refname
+fi
+oldrev=$(git rev-parse $oldrev)
+newrev=$(git rev-parse $newrev)
+
+function commits {
+  log=`git log --shortstat --pretty="format:%h%n%an%n%ae%n%at%n%s" $oldrev..$newrev | tr '\n' '|'`
+  IFS="|"
+  arr=( $log )
+  
+  # TODO: get creations/deletions from --shortstat
+
+  first=1
+  for (( i = 0; i < ${#arr[@]}; i+=7 )); do
+    [[ ${arr[i+5]} =~ ^\ ([0-9]+)\ .*\ ([0-9]+)\ .*\ ([0-9]+)\ .*$ ]]
+    changed=${BASH_REMATCH[1]}
+
+    [[ $first == 0 ]] && echo ","
+    echo "{
+      \"id\": \"${arr[i]}\",
+      \"message\": \"${arr[i+4]}\",
+      \"timestamp\": \"${arr[i+3]}\",
+      \"url\": \"$URL\",
+      \"added\": 0,
+      \"removed\": 0,
+      \"modified\": $changed,
+      \"author\": {
+        \"name\": \"${arr[i+1]}\",
+        \"email\": \"${arr[i+2]}\"
+      }
+    }"
+    
+    first=0
+  done
+
+}
+
+function json {
+  echo "{
+  \"before\": \"$oldrev\",
+  \"after\": \"$newrev\",
+  \"ref\": \"$refname\",
+  \"repository\": {
+    \"name\": \"$NAME\",
+    \"url\": \"$URL\",
+    \"pledgie\": \"\",
+    \"description\": \"Unknown\",
+    \"homepage\": \"$URL\",
+    \"watchers\": 0,
+    \"forks\": 0,
+    \"private\": true,
+    \"owner\": {
+      \"name\": \"Unknown\",
+      \"email\": \"Unknown\"
+    }
+  },
+  \"commits\": [
+    $(commits)
+  ]
+}"
+}
+
+json | curl --form "payload=<-" http://$HOST:$PORT/github
