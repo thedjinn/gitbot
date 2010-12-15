@@ -22,16 +22,16 @@ oldrev=$(git rev-parse $oldrev)
 newrev=$(git rev-parse $newrev)
 
 function commits {
-  log=`git log --shortstat --pretty="format:%h%n%an%n%ae%n%at%n%s" $oldrev..$newrev | tr '\n' '|'`
+  log=`git log --pretty="format:%h%n%an%n%ae%n%at%n%s" $oldrev..$newrev | tr '\n' '|'`
   IFS="|"
   arr=( $log )
   
   # TODO: get creations/deletions from --shortstat
 
   first=1
-  for (( i = 0; i < ${#arr[@]}; i+=7 )); do
-    [[ ${arr[i+5]} =~ ^\ ([0-9]+)\ .*\ ([0-9]+)\ .*\ ([0-9]+)\ .*$ ]]
-    changed=${BASH_REMATCH[1]}
+  for (( i = 0; i < ${#arr[@]}; i+=5 )); do
+#    [[ ${arr[i+5]} =~ ^\ ([0-9]+)\ .*\ ([0-9]+)\ .*\ ([0-9]+)\ .*$ ]]
+#    changed=${BASH_REMATCH[1]}
 
     [[ $first == 0 ]] && echo ","
     echo "{
@@ -39,9 +39,9 @@ function commits {
       \"message\": \"${arr[i+4]}\",
       \"timestamp\": \"${arr[i+3]}\",
       \"url\": \"$URL\",
-      \"added\": 0,
-      \"removed\": 0,
-      \"modified\": $changed,
+      \"added\": [],
+      \"removed\": [],
+      \"modified\": [],
       \"author\": {
         \"name\": \"${arr[i+1]}\",
         \"email\": \"${arr[i+2]}\"
