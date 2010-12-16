@@ -31,8 +31,12 @@ Thread.new do
   $bot.start
 end
 
-def say(msg)
-  $bot.Channel("#git").send msg
+def say(repo,msg)
+  $config["irc"]["channels"].each do |chan|
+    unless $config["filters"].include? chan and not $config["filters"][chan].include? repo
+      $bot.Channel(chan).send msg
+    end
+  end
 end
 
 configure do
@@ -60,11 +64,11 @@ post "/github" do
 
   # output first 3 commits
   push["commits"][0..2].each do |c|
-    say "\0030#{repo}:\0037 #{branch}\0033 #{c["author"]["name"]}\003 #{c["message"]}"
+    say repo, "\0030#{repo}:\0037 #{branch}\0033 #{c["author"]["name"]}\003 #{c["message"]}"
   end
 
   if push["commits"].length-2 > 0
-    say "\0030#{repo}:\0037 #{branch}\003 ... and #{push["commits"].length-2} more"
+    say repo, "\0030#{repo}:\0037 #{branch}\003 ... and #{push["commits"].length-2} more"
   end
 
   push.inspect
