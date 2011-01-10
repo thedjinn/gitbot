@@ -1,17 +1,17 @@
+PATH
+  remote: .
+  specs:
+    gitbot (1.0.0)
+      cinch (~> 1.0.0)
+      json
+      sinatra (~> 1.1.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
     cinch (1.0.2)
-    git (1.2.5)
-    jeweler (1.5.1)
-      bundler (~> 1.0.0)
-      git (>= 1.2.5)
-      rake
     json (1.4.6)
     rack (1.2.1)
-    rake (0.8.7)
-    rcov (0.9.9)
-    shoulda (2.11.3)
     sinatra (1.1.0)
       rack (~> 1.1)
       tilt (~> 1.1)
@@ -23,8 +23,6 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.0.0)
   cinch (~> 1.0.0)
-  jeweler (~> 1.5.1)
+  gitbot!
   json
-  rcov
-  shoulda
   sinatra (~> 1.1.0)

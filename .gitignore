@@ -3,3 +3,4 @@ config.yml
 coverage
 rdoc
 pkg
+*.gem
