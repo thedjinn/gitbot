@@ -58,7 +58,20 @@ post "/github" do
 
   # sort commits by timestamp
   push["commits"].sort! do |a,b|
-    DateTime.parse(a["timestamp"]) <=> DateTime.parse(b["timestamp"])
+    ta = tb = nil
+    begin
+      ta = DateTime.parse(a["timestamp"])
+    rescue ArgumentError
+      ta = Time.at(a["timestamp"].to_i)
+    end
+
+    begin
+      tb = DateTime.parse(b["timestamp"])
+    rescue ArgumentError
+      tb = Time.at(b["timestamp"].to_i)
+    end
+    
+    ta <=> tb
   end
 
   # output first 3 commits
