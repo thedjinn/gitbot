@@ -11,7 +11,7 @@ GEM
   specs:
     cinch (1.0.2)
     json (1.4.6)
-    rack (1.2.1)
+    rack (1.6.11)
     sinatra (1.1.0)
       rack (~> 1.1)
       tilt (~> 1.1)
@@ -22,7 +22,4 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.0.0)
-  cinch (~> 1.0.0)
   gitbot!
-  json
-  sinatra (~> 1.1.0)
